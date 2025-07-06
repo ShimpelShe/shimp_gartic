@@ -140,6 +140,16 @@ function dostupid() {
         left = left_objs[i];
         left.style.width = "45%";
       }
+      var others_objs = document.getElementsByClassName("others");
+      for (let i = 0; i < others_objs.length; i++) {
+        others = others_objs[i];
+        others.classList.remove("others");
+      }
+      var users_objs = document.getElementsByClassName("users");
+      for (let i = 0; i < users_objs.length; i++) {
+        users = users_objs[i];
+        users.style.width = "60%";
+      }
       var game_objs = document.getElementsByClassName("game");
       for (let i = 0; i < game_objs.length; i++) {
         game = game_objs[i];
