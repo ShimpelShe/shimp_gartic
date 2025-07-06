@@ -1,11 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "My Chrome Extension",
+  "name": "Shimple's Gartic Extension",
   "version": "1.0",
-  "description": "A simple Chrome extension example.",
+  "description": "Weew!",
   "permissions": ["activeTab", "scripting", "storage"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon.png"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://garticphone.com/*"],
+      "js": ["content.js"]
+    }
+  ]
 }
