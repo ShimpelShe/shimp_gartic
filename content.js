@@ -1,30 +1,76 @@
 var stupid;
-
-console.log(stupid + " before getlocal");
+var animCounter = 0;
 
 chrome.storage.local.get("stupidenabled", function (result) {
   if (result["stupidenabled"] == true) {
     stupid = true;
-    console.log(stupid + " in getlocal");
-    console.log("Stupidity is enabled");
   } else if (result["stupidenabled"] == false) {
     stupid = false;
-    console.log("Stupidity is disabled");
   } else if (result["stupidenabled"] == null) {
     stupid = false;
-    console.log("Stupidity is not set, defaulting to false");
     chrome.storage.local.set({ stupidenabled: false });
   }
-  console.log(stupid + " ingetlocal after condition");
 });
-
-console.log(stupid + " after getlocal, before condition");
 
 function loopcheck() {
   if (stupid == true) {
     dostupid();
   } else {
     requestAnimationFrame(loopcheck);
+  }
+}
+
+const classes = [
+  "time",
+  "step",
+  "color",
+  "thickness",
+  "tool",
+  "ready",
+  "download",
+  "sound",
+];
+
+function addEvents(HTML_ELEMENT, ANIM) {
+  HTML_ELEMENT.addEventListener("click", function () {
+    this.classList.remove(ANIM);
+    void this.offsetWidth;
+    this.classList.add(ANIM);
+  });
+  HTML_ELEMENT.addEventListener("onmousedown", function () {
+    this.classList.remove(ANIM);
+    void this.offsetWidth;
+    this.classList.add(ANIM);
+  });
+  HTML_ELEMENT.addEventListener("input", function () {
+    this.classList.remove(ANIM);
+    void this.offsetWidth;
+    this.classList.add(ANIM);
+  });
+  HTML_ELEMENT.addEventListener("animationend", function () {
+    this.classList.remove(ANIM);
+  });
+}
+
+function removeEvents(HTML_ELEMENT) {
+  HTML_ELEMENT.removeEventListener("click", function () {});
+  HTML_ELEMENT.removeEventListener("onmousedown", function () {});
+  HTML_ELEMENT.removeEventListener("input", function () {});
+  HTML_ELEMENT.removeEventListener("animationend", function () {});
+}
+
+function addAllEvents() {
+  for (let o = 0; o < classes.length; o++) {
+    var obj = document.getElementsByClassName(classes[o]);
+    for (let i = 0; i < obj.length; i++) {
+      if (classes[o] == "thickness") {
+        removeEvents(obj[i], "anim_thicknesspop");
+        addEvents(obj[i], "anim_thicknesspop");
+      } else {
+        removeEvents(obj[i], "anim_pop");
+        addEvents(obj[i], "anim_pop");
+      }
+    }
   }
 }
 
@@ -47,7 +93,7 @@ function dostupid() {
 
     @keyframes thicknesspop {
         0% {
-            width: 32px;
+            width: 24px;
             height: 32px;
         }
         100% {
@@ -62,49 +108,8 @@ function dostupid() {
 `;
     document.body.append(animcss);
 
-    function addEvents(HTML_ELEMENT, ANIM) {
-      HTML_ELEMENT.addEventListener("click", function () {
-        this.classList.remove(ANIM);
-        void this.offsetWidth;
-        this.classList.add(ANIM);
-      });
-      HTML_ELEMENT.addEventListener("onmousedown", function () {
-        this.classList.remove(ANIM);
-        void this.offsetWidth;
-        this.classList.add(ANIM);
-      });
-      HTML_ELEMENT.addEventListener("input", function () {
-        this.classList.remove(ANIM);
-        void this.offsetWidth;
-        this.classList.add(ANIM);
-      });
-      HTML_ELEMENT.addEventListener("animationend", function () {
-        this.classList.remove(ANIM);
-      });
-    }
-
-    const classes = [
-      "time",
-      "step",
-      "color",
-      "thickness",
-      "tool",
-      "ready",
-      "download",
-      "sound",
-    ];
-
     function logic() {
-      for (let o = 0; o < classes.length; o++) {
-        var obj = document.getElementsByClassName(classes[o]);
-        for (let i = 0; i < obj.length; i++) {
-          if (classes[o] == "thickness") {
-            addEvents(obj[i], "anim_thicknesspop");
-          } else {
-            addEvents(obj[i], "anim_pop");
-          }
-        }
-      }
+      animCounter++;
       var oslider_objs = document.getElementsByClassName("bxopacity");
       var oslider = oslider_objs[0]?.childNodes[1];
       if (oslider !== undefined) {
@@ -167,6 +172,9 @@ function dostupid() {
         if (side !== undefined) {
           side.remove();
         }
+      }
+      if (animCounter % 80 == 1) {
+        addAllEvents();
       }
 
       requestAnimationFrame(logic);
